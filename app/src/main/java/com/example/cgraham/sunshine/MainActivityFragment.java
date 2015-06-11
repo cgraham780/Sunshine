@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +39,10 @@ public class MainActivityFragment extends Fragment {
                 R.id.list_item_forecast_textview,
                 forecast
         );
+
+        ListView m_view = (ListView) rootView.findViewById(R.id.listview_forecast);
+        m_view.setAdapter(m_ForecastAdapter);
+
         return rootView;
     }
 }
