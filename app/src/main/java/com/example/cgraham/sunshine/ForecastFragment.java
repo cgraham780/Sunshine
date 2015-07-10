@@ -5,9 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -30,23 +27,20 @@ import java.util.List;
 public class ForecastFragment extends Fragment {
 
     ArrayAdapter<String> m_ForecastAdapter;
-
     public ForecastFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         String[] MyStringArray = {  "Today - Sunny - 28/18",
-                "Tomorrow - Rain - 23/15",
-                "Friday - Sunny - 25/13",
-                "Saturday - Sunny - 26/19",
-                "Sunday - Sunny - 25/16",
-                "Monday - Sunny - 25/18"};
+                                    "Tomorrow - Rain - 23/15",
+                                    "Friday - Sunny - 25/13",
+                                    "Saturday - Sunny - 26/19",
+                                    "Sunday - Sunny - 25/16",
+                                    "Monday - Sunny - 25/18"};
         List<String> forecast = new ArrayList<>(Arrays.asList(MyStringArray));
-
         m_ForecastAdapter = new ArrayAdapter<>(
                 getActivity(),
                 R.layout.list_item_forecast,
@@ -54,46 +48,19 @@ public class ForecastFragment extends Fragment {
                 forecast
         );
 
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
         ListView m_view = (ListView) rootView.findViewById(R.id.listview_forecast);
         m_view.setAdapter(m_ForecastAdapter);
+
 
         return rootView;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-        // Set to true so the fragment handles menu events.
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
-        inflater.inflate(R.menu.forecastfragment, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        int id = item.getItemId();
-
-        if (id == R.id.action_refresh)
-        {
-
-            return true;
-        }
-
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private class FetchWeatherTask extends AsyncTask<Void,Void, Void>{
+    private class FetchWeatherTask extends AsyncTask<Void, Void, Void> {
 
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
 
         @Override
-        protected Void doInBackground(Void... foo){
+        protected Void doInBackground(Void... params){
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
             HttpURLConnection urlConnection = null;
@@ -139,7 +106,7 @@ public class ForecastFragment extends Fragment {
                 Log.e(LOG_TAG, "Error ", e);
                 // If the code didn't successfully get the weather data, there's no point in attempting
                 // to parse it.
-                forecastJsonStr = null;
+                return null;
             } finally{
                 if (urlConnection != null) {
                     urlConnection.disconnect();
@@ -152,11 +119,8 @@ public class ForecastFragment extends Fragment {
                     }
                 }
             }
-
             return null;
         }
-
-
 
     }
 }
